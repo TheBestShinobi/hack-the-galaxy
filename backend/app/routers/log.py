@@ -15,10 +15,6 @@ class MovementLogResponse(BaseModel):
 
 @router.post("/movement", response_model=MovementLogResponse)
 async def log_movement(log: MovementLogRequest):
-    """
-    Receives passive movement data from the frontend and calculates carbon impact.
-    In a full implementation, this would also persist the entry to the database.
-    """
     result = calculate_transport_emissions(log.speed_kmh, log.distance_km)
     
     return result

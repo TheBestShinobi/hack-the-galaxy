@@ -1,4 +1,5 @@
 import os, json
+from google import genai
 import google.generativeai as genai
 from google.api_core import exceptions
  
@@ -20,9 +21,15 @@ async def ask_gemini_json(prompt: str) -> dict:
         raise Exception(f"Gemini API Error: {str(e)}")
  
 async def ask_gemini_text(prompt: str) -> str:
-    """Send prompt, return plain text."""
     response = model.generate_content(prompt)
     return response.text
+
+async def ask_gemini_image(file_path: str) -> str:
+    response = model.generate_content(
+        model="gemini-3-flash-preview",
+        contents=[genai.Client().files.upload(file=file_path), "Transcribe this image."],
+    )
+    print(response.text)
  
 def stream_gemini(prompt: str):
     """Generator for SSE streaming responses."""

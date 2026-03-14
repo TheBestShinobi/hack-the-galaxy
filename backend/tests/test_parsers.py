@@ -1,6 +1,26 @@
 import requests
 import json
 
+def test_receipt_parser():
+    url = "http://localhost:8000/parse/receipt"
+    
+    csv_data = "Description,Amount\nEggs 4.00\nMilk,4.00"
+    
+    payload = {"data": csv_data}
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.post(url, data=json.dumps(payload), headers=headers)
+    
+    if response.status_code == 200:
+        print("Success!")
+        data = response.json()
+        print(f"Total CO2: {data['total_kg_co2']}kg")
+        for item in data['items']:
+            print(f"Item: {item['description']} | CO2: {item['kg_co2']}kg")
+    else:
+        print(f"Error: {response.status_code}")
+        print(response.text)
+
 def test_bank_parser():
     url = "http://localhost:8000/parse/bank"
     
@@ -23,3 +43,4 @@ def test_bank_parser():
 
 if __name__ == "__main__":
     test_bank_parser()
+    test_receipt_parser()
