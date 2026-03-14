@@ -67,8 +67,8 @@ def test_receipt_image_parser():
     url = "http://localhost:8000/parse/receipt/image"
     headers = {"Authorization": "Bearer dev"}
     
-    with open("receipt.jpg", "rb") as f:
-        files = {"file": ("receipt.jpg", f, "image/jpeg")}
+    with open("receipt.png", "rb") as f:
+        files = {"file": ("receipt.png", f, "image/png")}
         response = requests.post(url, files=files, headers=headers)
     
     if response.status_code == 200:
