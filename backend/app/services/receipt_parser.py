@@ -48,7 +48,6 @@ Return ONLY valid JSON — no extra text, no markdown:
 confidence must be: high | medium | low
 """
 
-
 async def parse_receipt(text: str) -> dict:
     result = await ask_gemini_json(_PROMPT + text)
     result["source"] = "receipt"
