@@ -5,6 +5,7 @@ import AvaSTAR from './components/AvaSTAR'
 import EventComets from './components/EventComets'
 import CosmicMap from './components/CosmicMap'
 import StardustBackground from './components/StardustBackground'
+import CarbonLogger from './components/CarbonLogger'
 
 // Mock data for demo
 const mockUser = {
@@ -25,11 +26,11 @@ const mockEvents = [
 ]
 
 const mockFriends = [
-  { id: 1, name: 'Jordan', ecoScore: 92, isFocusing: true, x: 20, y: 30 },
-  { id: 2, name: 'Sam', ecoScore: 78, isFocusing: false, x: 70, y: 25 },
-  { id: 3, name: 'Taylor', ecoScore: 88, isFocusing: true, x: 45, y: 70 },
-  { id: 4, name: 'Casey', ecoScore: 65, isFocusing: false, x: 80, y: 65 },
-  { id: 5, name: 'Morgan', ecoScore: 95, isFocusing: false, x: 30, y: 80 },
+  { id: 1, name: 'Mara', ecoScore: 92, isFocusing: true, x: 20, y: 30 },
+  { id: 2, name: 'Emily', ecoScore: 78, isFocusing: false, x: 70, y: 25 },
+  { id: 3, name: 'Jennifer', ecoScore: 88, isFocusing: true, x: 45, y: 70 },
+  { id: 4, name: 'Sydney', ecoScore: 65, isFocusing: false, x: 80, y: 65 },
+  { id: 5, name: 'An', ecoScore: 95, isFocusing: false, x: 30, y: 80 },
 ]
 
 function App() {
@@ -56,9 +57,9 @@ function App() {
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
             className="inline-block"
           >
-            <h1 className="text-5xl sm:text-7xl font-heading tracking-wider">
+            <h1 className="text-5xl sm:text-7xl font-lobster tracking-wide" style={{ fontFamily: 'Lobster, cursive' }}>
               <span className="text-cosmic-pink drop-shadow-lg">ECO</span>
-              <span className="text-cosmic-lavender drop-shadow-lg">NOVA</span>
+              <span className="text-pink-300 drop-shadow-lg">NOVA</span>
             </h1>
           </motion.div>
           
@@ -100,7 +101,7 @@ function App() {
 
         {/* Navigation */}
         <nav className="flex justify-center gap-3 mb-10 flex-wrap">
-          {['galaxy', 'comets', 'leaderboard'].map((tab, index) => (
+          {['galaxy', 'comets', 'leaderboard', 'logger'].map((tab, index) => (
             <motion.button
               key={tab}
               initial={{ opacity: 0, y: 20 }}
@@ -109,7 +110,7 @@ function App() {
               onClick={() => setActiveTab(tab)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`px-8 py-4 rounded-full font-medium transition-all duration-300 ${
+              className={`px-6 py-3 sm:px-8 sm:py-4 rounded-full font-medium transition-all duration-300 text-sm sm:text-base ${
                 activeTab === tab
                   ? 'bg-gradient-to-r from-cosmic-pink to-cosmic-violet text-white neon-pink'
                   : 'glass text-cosmic-pinkLight hover:text-white hover:bg-cosmic-pink/20'
@@ -117,7 +118,8 @@ function App() {
             >
               {tab === 'galaxy' && 'The Galaxy'}
               {tab === 'comets' && 'Event Comets'}
-              {tab === 'leaderboard' && 'Cosmic Map'}
+              {tab === 'leaderboard' && 'Friend Stars'}
+              {tab === 'logger' && 'Log Carbon'}
             </motion.button>
           ))}
         </nav>
@@ -127,9 +129,10 @@ function App() {
           {activeTab === 'galaxy' && (
             <motion.div
               key="galaxy"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, x: -50, scale: 0.9 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: 50, scale: 0.9 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
               className="grid grid-cols-1 lg:grid-cols-2 gap-8"
             >
               {/* AvaSTAR Section */}
@@ -147,16 +150,16 @@ function App() {
                   isHighEcoScore={isHighEcoScore}
                   isHighCarbonMass={isHighCarbonMass}
                 />
-                <div className="mt-8 flex gap-8">
+                <div className="mt-12 flex gap-12">
                   <div className="text-center">
                     <p className="text-cosmic-pinkLight text-sm mb-1">Eco Score</p>
-                    <p className={`text-5xl font-heading ${isHighEcoScore ? 'text-cosmic-pink' : 'text-cosmic-debris'}`}>
+                    <p className={`text-4xl font-quicksand font-bold ${isHighEcoScore ? 'text-cosmic-pink' : 'text-cosmic-debris'}`}>
                       {user.ecoScore}
                     </p>
                   </div>
                   <div className="text-center">
                     <p className="text-cosmic-lavenderLight text-sm mb-1">Carbon</p>
-                    <p className={`text-3xl font-mono ${isHighCarbonMass ? 'text-red-400' : 'text-cosmic-cyan'}`}>
+                    <p className={`text-3xl font-quicksand font-bold ${isHighCarbonMass ? 'text-red-400' : 'text-cosmic-cyan'}`}>
                       {user.carbonMass} kg
                     </p>
                   </div>
@@ -220,9 +223,10 @@ function App() {
           {activeTab === 'comets' && (
             <motion.div
               key="comets"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, x: 50, scale: 0.9 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: -50, scale: 0.9 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
             >
               <EventComets events={mockEvents} />
             </motion.div>
@@ -231,9 +235,10 @@ function App() {
           {activeTab === 'leaderboard' && (
             <motion.div
               key="leaderboard"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, y: 50, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -50, scale: 0.9 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
             >
               <CosmicMap 
                 friends={mockFriends} 
@@ -241,6 +246,18 @@ function App() {
                 constellationMode={constellationMode}
                 focusingFriends={focusingFriends}
               />
+            </motion.div>
+          )}
+
+          {activeTab === 'logger' && (
+            <motion.div
+              key="logger"
+              initial={{ opacity: 0, y: 50, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -50, scale: 0.9 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+            >
+              <CarbonLogger />
             </motion.div>
           )}
         </AnimatePresence>

@@ -30,6 +30,8 @@ export default {
         heading: ['Bebas Neue', 'sans-serif'],
         mono: ['DM Mono', 'monospace'],
         body: ['Inter', 'sans-serif'],
+        quicksand: ['Quicksand', 'sans-serif'],
+        lobster: ['Lobster', 'cursive'],
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
