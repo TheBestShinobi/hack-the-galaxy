@@ -14,6 +14,13 @@ const CarbonLogger = () => {
   const [error, setError] = useState(null)
   const [result, setResult] = useState(null)
 
+  const resetForm = () => {
+    setSubmitted(false)
+    setResult(null)
+    setReceiptFile(null)
+    setTransactionData({ transactionName: '', transactionAmount: '' })
+  }
+
   const handleTransactionSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -26,18 +33,8 @@ const CarbonLogger = () => {
       const response = await parseBank(transactionText)
       setResult(response)
       setSubmitted(true)
-      setTimeout(() => {
-        setSubmitted(false)
-        setTransactionData({ transactionName: '', transactionAmount: '' })
-      }, 3000)
     } catch (err) {
       setError(err.message)
-      // Fallback: simulate success even if API fails
-      setSubmitted(true)
-      setTimeout(() => {
-        setSubmitted(false)
-        setTransactionData({ transactionName: '', transactionAmount: '' })
-      }, 3000)
     } finally {
       setIsSubmitting(false)
     }
@@ -55,18 +52,8 @@ const CarbonLogger = () => {
         const response = await parseReceiptImage(file)
         setResult(response)
         setSubmitted(true)
-        setTimeout(() => {
-          setSubmitted(false)
-          setReceiptFile(null)
-        }, 3000)
       } catch (err) {
         setError(err.message)
-        // Fallback: simulate success even if API fails
-        setSubmitted(true)
-        setTimeout(() => {
-          setSubmitted(false)
-          setReceiptFile(null)
-        }, 3000)
       } finally {
         setIsSubmitting(false)
       }
@@ -121,7 +108,7 @@ const CarbonLogger = () => {
       </div>
 
       {/* Success Message */}
-      {submitted && (
+      {submitted && result && (
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -131,11 +118,27 @@ const CarbonLogger = () => {
           <p className="text-cosmic-green font-medium">
             {activeMode === 'transaction' ? 'Transaction logged successfully!' : 'Receipt scanned & processed!'}
           </p>
-          {result && (
-            <p className="text-cosmic-lavenderLight text-sm mt-1">
-              Carbon impact: {JSON.stringify(result)}
+          <div className="text-cosmic-lavenderLight text-sm mt-4 text-left bg-cosmic-deep/50 p-4 rounded-lg font-mono">
+            <p>
+              <span className="font-bold text-cosmic-pink">Total CO2:</span> {result.total_kg_co2} kg
             </p>
-          )}
+            <p>
+              <span className="font-bold text-cosmic-pink">Rating:</span> {result.rating}
+            </p>
+            <h4 className="font-bold text-cosmic-pink mt-2">Items:</h4>
+            <ul className="list-disc list-inside">
+              {result.items.map((item, index) => (
+                <li key={index}>{item.description}: {item.kg_co2} kg</li>
+              ))}
+            </ul>
+          </div>
+          <motion.button
+            onClick={resetForm}
+            whileHover={{ scale: 1.05 }}
+            className="mt-4 px-6 py-2 rounded-full glass text-sm text-cosmic-pinkLight hover:bg-cosmic-pink/20 transition-colors"
+          >
+            Log Another
+          </motion.button>
         </motion.div>
       )}
 
@@ -294,11 +297,8 @@ const CarbonLogger = () => {
                       const response = await parseReceiptText('Grocery: milk, eggs, bread, vegetables - $45.50')
                       setResult(response)
                       setSubmitted(true)
-                      setTimeout(() => { setSubmitted(false); setReceiptFile(null) }, 3000)
                     } catch (err) {
                       setError(err.message)
-                      setSubmitted(true)
-                      setTimeout(() => { setSubmitted(false); setReceiptFile(null) }, 3000)
                     } finally {
                       setIsSubmitting(false)
                     }
@@ -316,11 +316,8 @@ const CarbonLogger = () => {
                       const response = await parseReceiptText('Flight: NYC to LA - $350.00')
                       setResult(response)
                       setSubmitted(true)
-                      setTimeout(() => { setSubmitted(false); setReceiptFile(null) }, 3000)
                     } catch (err) {
                       setError(err.message)
-                      setSubmitted(true)
-                      setTimeout(() => { setSubmitted(false); setReceiptFile(null) }, 3000)
                     } finally {
                       setIsSubmitting(false)
                     }
@@ -338,11 +335,8 @@ const CarbonLogger = () => {
                       const response = await parseReceiptText('Restaurant: dinner for 2 - $85.00')
                       setResult(response)
                       setSubmitted(true)
-                      setTimeout(() => { setSubmitted(false); setReceiptFile(null) }, 3000)
                     } catch (err) {
                       setError(err.message)
-                      setSubmitted(true)
-                      setTimeout(() => { setSubmitted(false); setReceiptFile(null) }, 3000)
                     } finally {
                       setIsSubmitting(false)
                     }
