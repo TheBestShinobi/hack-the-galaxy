@@ -2,6 +2,7 @@ import base64
 import json
 import google.generativeai as genai
 from .gemini import ask_gemini_json
+from app.utils.carbon_calc import calculate_total_from_items, get_emission_rating
 
 _PROMPT = """\
 You are a carbon footprint calculator.
@@ -54,9 +55,8 @@ async def parse_receipt(text: str) -> dict:
     result = await ask_gemini_json(_PROMPT + text)
     result["source"] = "receipt"
     if "items" in result:
-        result["total_kg_co2"] = round(
-            sum(i.get("kg_co2", 0) for i in result["items"]), 3
-        )
+        result["total_kg_co2"] = calculate_total_from_items(result["items"])
+        result["rating"] = get_emission_rating(result["total_kg_co2"], len(result["items"]))
     return result
 
 
@@ -76,7 +76,6 @@ async def parse_receipt_image(image_bytes: bytes, content_type: str = "image/jpe
     result = json.loads(response.text)
     result["source"] = "receipt_image"
     if "items" in result:
-        result["total_kg_co2"] = round(
-            sum(i.get("kg_co2", 0) for i in result["items"]), 3
-        )
+        result["total_kg_co2"] = calculate_total_from_items(result["items"])
+        result["rating"] = get_emission_rating(result["total_kg_co2"], len(result["items"]))
     return result

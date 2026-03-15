@@ -16,7 +16,7 @@ def test_receipt_image_parser():
             if response.status_code == 200:
                 print("Success! (Image)")
                 data = response.json()
-                print(f"Total CO2: {data['total_kg_co2']}kg")
+                print(f"Total CO2: {data['total_kg_co2']}kg | Rating: {data.get('rating')}")
                 for item in data['items']:
                     print(f"Item: {item['description']} | CO2: {item['kg_co2']}kg")
             else:
@@ -38,7 +38,7 @@ def test_bank_parser():
     if response.status_code == 200:
         print("Success! (Bank)")
         data = response.json()
-        print(f"Total CO2: {data['total_kg_co2']}kg")
+        print(f"Total CO2: {data['total_kg_co2']}kg | Rating: {data.get('rating')}")
         for item in data['items']:
             print(f"Item: {item['description']} | CO2: {item['kg_co2']}kg")
     else:
@@ -61,7 +61,7 @@ def test_receipt_text_parser():
     if response.status_code == 200:
         print("Success! (Receipt Text)")
         data = response.json()
-        print(f"Total CO2: {data['total_kg_co2']}kg")
+        print(f"Total CO2: {data['total_kg_co2']}kg | Rating: {data.get('rating')}")
         for item in data['items']:
             print(f"Item: {item['description']} | Category: {item['category']} | CO2: {item['kg_co2']}kg | Confidence: {item['confidence']}")
     else:

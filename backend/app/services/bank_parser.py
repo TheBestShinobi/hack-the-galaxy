@@ -1,4 +1,5 @@
 from .gemini import ask_gemini_json
+from app.utils.carbon_calc import calculate_total_from_items, get_emission_rating
  
 PROMPT = """
 You are a carbon footprint calculator.
@@ -20,4 +21,7 @@ Transactions:
 async def parse_bank(text: str) -> dict:
     result = await ask_gemini_json(PROMPT + text)
     result["source"] = "bank"
+    if "items" in result:
+        result["total_kg_co2"] = calculate_total_from_items(result["items"])
+        result["rating"] = get_emission_rating(result["total_kg_co2"], len(result["items"]))
     return result
